@@ -1,7 +1,7 @@
 import pickle
 
 # Load the addresses from the pickle file
-with open('output/rich_contract_addresses_verified.pickle', 'rb') as f:
+with open('output/contract_addresses_verified.pickle', 'rb') as f:
     addresses = pickle.load(f)
 
 # Prepend 'https://etherscan.io/address/' to each address

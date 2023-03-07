@@ -3,6 +3,7 @@ from web3 import Web3
 import pickle
 import os
 from set_envs import setenvs
+import datetime
 
 # set environment variables and retrieve them
 setenvs()
@@ -159,7 +160,11 @@ for index, address in enumerate(addresses):
     except Exception as e:
         print("Error in rich address processing " , e)
 
+
+# incorporate time in filename
+current_time = datetime.datetime.now()
+current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
         
 # Save the addresses array to a file using pickle
-with open('rich_contract_addresses_unverified.pickle', 'wb') as f:
+with open(f'contract_addresses_unverified_{current_time_str}.pickle', 'wb') as f:
     pickle.dump(rich_addresses, f)
