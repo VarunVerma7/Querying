@@ -5,14 +5,13 @@ import os
 from set_envs import setenvs
 import datetime
 
-
-def contract_verified(filename):
+def filter_contracts_verified(filename):
     # set and get environment variable
     setenvs()
     etherscan_api_key = os.environ.get('ETHERSCAN_API_KEY')
 
     # Load the addresses array from the file using pickle
-    with open('output/contract_addresses_unverified.pickle', 'rb') as f:
+    with open(filename, 'rb') as f:
         addresses = pickle.load(f)
 
     # loop through each address and check its verification status
@@ -49,4 +48,3 @@ def contract_verified(filename):
         pickle.dump(verified_addresses, f)
 
 
-    print(verified_addresses)
