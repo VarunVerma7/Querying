@@ -10,7 +10,7 @@ setenvs()
 etherscan_api_key = os.environ.get('ETHERSCAN_API_KEY')
 
 # Load the addresses array from the file using pickle
-with open('output/rich_contract_addresses_unverfied.pickle', 'rb') as f:
+with open('output/rich_contract_addresses_unverified.pickle', 'rb') as f:
     addresses = pickle.load(f)
 
 # loop through each address and check its verification status
@@ -18,7 +18,7 @@ verified_addresses = []
 verified_count = 0
 print(f"Going to loop through these many addresses {len(addresses)})")
 
-for address in addresses[:5]:
+for address in addresses:
 
     # Pause for 200 milliseconds to account for rate throttling of Etherscan API
     time.sleep(0.2)  
@@ -26,9 +26,9 @@ for address in addresses[:5]:
 
 
     # make a request to the Etherscan API to get the contract verification status
-    response = requests.get(url)
-    data = response.json()
     try:
+        response = requests.get(url)
+        data = response.json()
         # if this indexing works, contract has been verified
         if data['result'][0]['SourceCode']:
             verified_count += 1
@@ -39,7 +39,7 @@ for address in addresses[:5]:
 
 
 # print the verified addresses
-with open('rich_contract_addresses_verified.pickle', 'wb') as f:
+with open('output/rich_contract_addresses_verified.pickle', 'wb') as f:
     pickle.dump(verified_addresses, f)
 
 

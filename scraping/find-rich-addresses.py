@@ -13,11 +13,11 @@ w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 # Get the current block number
 block_number = w3.eth.block_number
-block_range_to_query = range(block_number - 10 , block_number + 1)
+block_range_to_query = range(block_number - 100 , block_number + 1)
 
 # Abi for viewing the balance of an address
 ABI = [
-    {
+    { 
         "inputs": [],
         "name": "decimals",
         "outputs": [{"internalType": "uint8", "name": "", "type": "uint8"}],
@@ -129,7 +129,7 @@ rich_addresses = []
 print(f"Going to loop through these many addresses {len(addresses)})")
 for index, address in enumerate(addresses):
     # every 100 indexes print the current status
-    if index % 100:
+    if index % 50 == 0:
         print(f"Processing address {index} of {len(addresses)}")
 
 
@@ -161,5 +161,5 @@ for index, address in enumerate(addresses):
 
         
 # Save the addresses array to a file using pickle
-with open('rich_contract_addresses_unverfied.pickle', 'wb') as f:
+with open('rich_contract_addresses_unverified.pickle', 'wb') as f:
     pickle.dump(rich_addresses, f)
