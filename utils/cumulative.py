@@ -25,11 +25,13 @@ for filename in os.listdir('../output/verified'):
 
 
     # check which addresses are in my_set but not in the cumulative set 
-    addresses_not_in_cumlative_set = verified_set.difference(cumulative_address_set)
+    addresses_not_in_cumlative_set = verified_set.difference(cumulative_address_set).to_list()
 
 
     # append them to the notion table, prefixing the etherscan link to each address
+    addresses_not_in_cumlative_set_with_url = [f'https://etherscan.io/address/{address}' for address in addresses_not_in_cumlative_set]
     notion = Client(auth=os.get)
+
 
     # write the new addresses to the cumulative file
         
