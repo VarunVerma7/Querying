@@ -35,8 +35,8 @@ def filter_duplicates(potential_new_addresses):
 
 
     # check which addresses are in my_set but not in the cumulative set 
-    notion_set = set(notion_addresses)
-    addresses_not_in_cumlative_set = list(notion_set.difference(potential_new_addresses))
+    potential_new_addresses = set(potential_new_addresses)
+    addresses_not_in_cumlative_set = list(potential_new_addresses.difference(notion_addresses))
 
 
     # append them to the notion table, prefixing the etherscan link to each address
