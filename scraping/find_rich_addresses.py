@@ -90,88 +90,93 @@ def get_usd_value(token_address, token_amount):
 
 
 
-# Loop through the last 5 blocks
-addresses = []
-for block in block_range_to_query:
-    print(f'Processing block {block}')
-    try:
-        # Get the transactions in the block
-        block = w3.eth.get_block(block)
-        transactions = block['transactions']
+def find_addresses_with_code():
+    # Loop through the last 5 blocks
+    addresses = []
+    for block in block_range_to_query:
+        print(f'Processing block {block}')
+        try:
+            # Get the transactions in the block
+            block = w3.eth.get_block(block)
+            transactions = block['transactions']
 
-        # Loop through the transactions
-        for tx in transactions:
-            # Get the transaction details
-            tx_details = w3.eth.get_transaction(tx)
+            # Loop through the transactions
+            for tx in transactions:
+                # Get the transaction details
+                tx_details = w3.eth.get_transaction(tx)
 
-            # checksum addresses
-            from_address_checksummed = Web3.to_checksum_address(tx_details['from'].lower())
-            to_address_checksummed = Web3.to_checksum_address(tx_details['to'].lower())
+                # checksum addresses
+                from_address_checksummed = Web3.to_checksum_address(tx_details['from'].lower())
+                to_address_checksummed = Web3.to_checksum_address(tx_details['to'].lower())
 
-            # see if the from and to have code to exclude EOAs
-            from_code = w3.eth.get_code(from_address_checksummed)
-            to_code = w3.eth.get_code(to_address_checksummed)
-
-
-            # Add the to addresses to the list if its legitamate
-            if len(to_code) > 0:
-                addresses.append(to_address_checksummed)
-
-            # Add the from address to the list if its legitamate
-            if len(from_code) > 0:
-                addresses.append(from_address_checksummed)
-
-    except Exception as e:
-        print("Error: ", e)
-
-# Remove duplicates from the list of addresses
-addresses = list(set(addresses))
-
-# Create a list to store the addresses with a balance of at least 50,000 USD
-rich_addresses = []
-print(f"Going to loop through these many addresses {len(addresses)})")
-for index, address in enumerate(addresses):
-    # every 100 indexes print the current status
-    if index % 50 == 0:
-        print(f"Processing address {index} of {len(addresses)}")
+                # see if the from and to have code to exclude EOAs
+                from_code = w3.eth.get_code(from_address_checksummed)
+                to_code = w3.eth.get_code(to_address_checksummed)
 
 
-    try:
-        # Get the balance of each token for the address
-        usdc_balance = w3.eth.contract(USDC_ADDRESS, abi=ABI).functions.balanceOf(address).call()
-        usdt_balance = w3.eth.contract(USDT_ADDRESS, abi=ABI).functions.balanceOf(address).call()
-        dai_balance = w3.eth.contract(DAI_ADDRESS, abi=ABI).functions.balanceOf(address).call()
-        tether_balance = w3.eth.contract(TETHER_ADDRESS, abi=ABI).functions.balanceOf(address).call()
-        bnb_balance = w3.eth.contract(BNB_ADDRESS, abi=ABI).functions.balanceOf(address).call()
-        eth_balance = w3.eth.get_balance(address)
+                # Add the to addresses to the list if its legitamate
+                if len(to_code) > 0:
+                    addresses.append(to_address_checksummed)
 
-        # Convert the token balances to USD values
-        usdc_value_of_contract = get_usd_value(USDC_ADDRESS, usdc_balance) 
-        usdt_value_of_contract = get_usd_value(USDT_ADDRESS, usdt_balance)
-        dai_value_of_contract = get_usd_value(DAI_ADDRESS, dai_balance)
-        tether_value_of_contract = get_usd_value(TETHER_ADDRESS, tether_balance)
-        bnb_value_of_contract = get_usd_value(BNB_ADDRESS, bnb_balance)
-        eth_value_of_contract = get_usd_value(w3.eth.default_account, eth_balance)
+                # Add the from address to the list if its legitamate
+                if len(from_code) > 0:
+                    addresses.append(from_address_checksummed)
 
-        total_value_of_contract = usdc_value_of_contract + usdt_value_of_contract + dai_value_of_contract + tether_value_of_contract + bnb_value_of_contract + eth_value_of_contract
-        
+        except Exception as e:
+            print("Error: ", e)
 
-        if total_value_of_contract > value_to_filter:
-            print(address, total_value_of_contract)
-            rich_addresses.append(address)
-    except Exception as e:
-        print("Error in rich address processing " , e)
+    # Remove duplicates from the list of addresses
+    addresses = list(set(addresses))
 
 
-# incorporate time in filename
-current_time = datetime.datetime.now()
-current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
-        
-# Save the addresses array to a file using pickle
+def filter_addresses_with_balance(addresses_with_code):
+    # Create a list to store the addresses with a balance of at least 50,000 USD
+    rich_addresses = []
+    print(f"Going to loop through these many addresses {len(addresses_with_code)})")
+    for index, address in enumerate(addresses_with_code):
+        # every 100 indexes print the current status
+        if index % 50 == 0:
+            print(f"Processing address {index} of {len(addresses_with_code)}")
 
-filename = f'../output/unverified/contract_addresses_unverified_{current_time_str}.pickle'
-with open(filename, 'wb') as f:
-    pickle.dump(rich_addresses, f)
+
+        try:
+            # Get the balance of each token for the address
+            usdc_balance = w3.eth.contract(USDC_ADDRESS, abi=ABI).functions.balanceOf(address).call()
+            usdt_balance = w3.eth.contract(USDT_ADDRESS, abi=ABI).functions.balanceOf(address).call()
+            dai_balance = w3.eth.contract(DAI_ADDRESS, abi=ABI).functions.balanceOf(address).call()
+            tether_balance = w3.eth.contract(TETHER_ADDRESS, abi=ABI).functions.balanceOf(address).call()
+            bnb_balance = w3.eth.contract(BNB_ADDRESS, abi=ABI).functions.balanceOf(address).call()
+            eth_balance = w3.eth.get_balance(address)
+
+            # Convert the token balances to USD values
+            usdc_value_of_contract = get_usd_value(USDC_ADDRESS, usdc_balance) 
+            usdt_value_of_contract = get_usd_value(USDT_ADDRESS, usdt_balance)
+            dai_value_of_contract = get_usd_value(DAI_ADDRESS, dai_balance)
+            tether_value_of_contract = get_usd_value(TETHER_ADDRESS, tether_balance)
+            bnb_value_of_contract = get_usd_value(BNB_ADDRESS, bnb_balance)
+            eth_value_of_contract = get_usd_value(w3.eth.default_account, eth_balance)
+
+            total_value_of_contract = usdc_value_of_contract + usdt_value_of_contract + dai_value_of_contract + tether_value_of_contract + bnb_value_of_contract + eth_value_of_contract
+            
+
+            if total_value_of_contract > value_to_filter:
+                print(address, total_value_of_contract)
+                rich_addresses.append(address)
+        except Exception as e:
+            print("Error in rich address processing " , e)
 
 
-filter_contracts_verified(filename)
+    # incorporate time in filename
+    current_time = datetime.datetime.now()
+    current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
+            
+    # Save the addresses array to a file using pickle
+
+    filename = f'../output/unverified/contract_addresses_unverified_{current_time_str}.pickle'
+    with open(filename, 'wb') as f:
+        pickle.dump(rich_addresses, f)
+
+    return filename
+
+
+    filter_contracts_verified(filename)
