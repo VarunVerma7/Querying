@@ -130,12 +130,8 @@ def find_addresses_with_code(start_block, end_block):
 def filter_addresses_with_balance(addresses_with_code):
     # Create a list to store the addresses with a balance of at least 50,000 USD
     rich_addresses = []
-    print(f"Going to loop through these many addresses {len(addresses_with_code)})")
+    print(f"Going to loop through {len(addresses_with_code)} contract addresses and see who's got some money")
     for index, address in enumerate(addresses_with_code):
-        # every 100 indexes print the current status
-        if index % 50 == 0:
-            print(f"Processing address {index} of {len(addresses_with_code)}")
-
 
         try:
             # Get the balance of each token for the address
@@ -162,7 +158,7 @@ def filter_addresses_with_balance(addresses_with_code):
                 print(F"Address {address} is worth {dollar_formatted_value}")
                 rich_addresses.append(address)
         except Exception as e:
-            print("Error in rich address processing " , e)
+            print("Error getting the balance of address {address}: " , e)
 
 
     return rich_addresses

@@ -11,12 +11,12 @@ def filter_contracts_verified(rich_addresses):
     verified_addresses = []
     verified_count = 0
 
-    print(f"Going to loop through {len(rich_addresses)}) to see how many are verified on Etherscan")
+    print(f"Going to loop through {len(rich_addresses)} to see how many are verified on Etherscan")
 
     for address in rich_addresses:
 
-        # Pause for 200 milliseconds to account for rate throttling of Etherscan API
-        time.sleep(0.2)  
+        # Pause for 300 milliseconds to account for rate throttling of Etherscan API
+        time.sleep(0.3)  
         url =  f"https://api.etherscan.io/api?module=contract&action=getsourcecode&address={address}&apikey={etherscan_api_key}"
 
 
@@ -27,13 +27,13 @@ def filter_contracts_verified(rich_addresses):
             # if this indexing works, contract has been verified
             if data['result'][0]['SourceCode']:
                 verified_count += 1
-                print(f"Verified count is {verified_count}")
+                print(f"Address {address} is verified!")
                 verified_addresses.append(address)
         except Exception as e:
-            print("Error ", e)
+            print("Error when verifying address {address} on etherscan: ", e)
 
 
-    print(f"Found {verified_count} verified addresses out of {len(rich_addresses)} addresses")
+    print(f"Verified {verified_count} addresses out of {len(rich_addresses)} contract addresses")
     return rich_addresses
 
 
