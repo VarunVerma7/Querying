@@ -38,6 +38,12 @@ def filter_duplicates(potential_new_addresses):
     potential_new_addresses = set(potential_new_addresses)
     addresses_not_in_cumlative_set = list(potential_new_addresses.difference(notion_addresses))
 
+    intersection_addresses = potential_new_addresses.intersection(notion_addresses)
+
+    for address in intersection_addresses:
+        print(f"Address {address} is already in the notion database!")
+
+
 
     # append them to the notion table, prefixing the etherscan link to each address
     etherscan_links = [f'https://etherscan.io/address/{address}' for address in addresses_not_in_cumlative_set]
