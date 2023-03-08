@@ -1,16 +1,14 @@
 import os
 import pickle
 from notion_client import Client
-from push_to_notion import add_row_to_notion
-from notion_client import Client
 
 
 
 
 def filter_duplicates(potential_new_addresses):
 
-    notion = Client(auth='secret_w8djEs25hK8HOJ9F88qOz9puxBbpDQaYeoozj4hqdU')
-    database_id = "48e417cfbba449efac29a20f836f8247"
+    notion = Client(auth=os.environ['NOTION_TOKEN'])
+    database_id = os.environ['NOTION_DATABASE_ID']
 
 
 
@@ -68,7 +66,7 @@ def add_rows_to_notion(etherscan_address_links):
         }
 
         # Create new row in the database
-        new_row = notion.pages.create(parent={"database_id": database_id}, properties=new_row_properties)
+        notion.pages.create(parent={"database_id": database_id}, properties=new_row_properties)
 
        
 

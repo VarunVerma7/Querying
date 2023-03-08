@@ -6,18 +6,12 @@ from utils.set_envs import setenvs
 import datetime
 
 def filter_contracts_verified(rich_addresses):
-    # set and get environment variable
-    setenvs()
+
     etherscan_api_key = os.environ.get('ETHERSCAN_API_KEY')
-
-    # # Load the addresses array from the file using pickle
-    # with open(filename, 'rb') as f:
-    #     addresses = pickle.load(f)
-
-    # # loop through each address and check its verification status
     verified_addresses = []
     verified_count = 0
-    print(f"Going to loop through these many addresses {len(rich_addresses)})")
+
+    print(f"Going to loop through {len(rich_addresses)}) to see how many are verified on Etherscan")
 
     for address in rich_addresses:
 
@@ -33,20 +27,13 @@ def filter_contracts_verified(rich_addresses):
             # if this indexing works, contract has been verified
             if data['result'][0]['SourceCode']:
                 verified_count += 1
-                print(f"Verified {verified_count} out of {len(rich_addresses)} addresses")
+                print("Verified count is {verified_count}")
                 verified_addresses.append(address)
         except Exception as e:
             print("Error ", e)
 
 
-    # incorporate time in filename
-    current_time = datetime.datetime.now()
-    current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
-
-    # print the verified addresses
-    with open(f'../output/verified/contract_addresses_verified_{current_time_str}.pickle', 'wb') as f:
-        pickle.dump(verified_addresses, f)
-
+    print(f"Found {verified_count} verified addresses out of {len(rich_addresses)} addresses")
     return rich_addresses
 
 

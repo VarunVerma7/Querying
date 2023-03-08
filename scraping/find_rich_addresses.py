@@ -3,8 +3,6 @@ from web3 import Web3
 import pickle
 import os
 from utils.set_envs import setenvs
-import datetime
-from filter_verified import filter_contracts_verified
 
 
 # set environment variables and retrieve them
