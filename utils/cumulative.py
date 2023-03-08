@@ -4,19 +4,13 @@ from notion_client import Client
 from push_to_notion import add_row_to_notion
 
 
-verified_set = set()
 
-# Loop through every file in the 'output/verified' directory
-for filename in os.listdir('../output/verified'):
-    # Load the addresses array from the file using pickle
-    filepath = os.path.join('output/verified', filename)
 
-    with open(filename, 'rb') as f:
-        addresses = pickle.load(f)
-    
-    
+def filter_duplicates(existing_addresses):
+    existing_set = set()
+
     # Add the addresses to the set
-    verified_set.update(addresses)
+    existing_set.update(existing_addresses)
 
 
     # read the addresses in current cumulative set
@@ -25,7 +19,7 @@ for filename in os.listdir('../output/verified'):
 
 
     # check which addresses are in my_set but not in the cumulative set 
-    addresses_not_in_cumlative_set = verified_set.difference(cumulative_address_set).to_list()
+    addresses_not_in_cumlative_set = existing_set.difference(cumulative_address_set).to_list()
 
 
     # append them to the notion table, prefixing the etherscan link to each address
