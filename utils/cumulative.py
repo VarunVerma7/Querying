@@ -1,7 +1,7 @@
 import os
 import pickle
 from notion_client import Client
-
+from push_to_notion import add_row_to_notion
 
 
 verified_set = set()
@@ -30,10 +30,13 @@ for filename in os.listdir('../output/verified'):
 
     # append them to the notion table, prefixing the etherscan link to each address
     addresses_not_in_cumlative_set_with_url = [f'https://etherscan.io/address/{address}' for address in addresses_not_in_cumlative_set]
-    notion = Client(auth=os.get)
+    
+    # add the addresses to the notion table
+    for address in addresses_not_in_cumlative_set_with_url:
+        add_row_to_notion(address)
 
 
-    # write the new addresses to the cumulative file
+    print(f"Added {len(addresses_not_in_cumlative_set_with_url)} addresses to notion table from file {filename}")
         
     
 
