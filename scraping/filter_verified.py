@@ -44,7 +44,7 @@ def filter_contracts_verified(filename):
     current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
     # print the verified addresses
-    with open(f'output/contract_addresses_verified_{current_time_str}.pickle', 'wb') as f:
+    with open(f'../output/verified/contract_addresses_verified_{current_time_str}.pickle', 'wb') as f:
         pickle.dump(verified_addresses, f)
 
 
