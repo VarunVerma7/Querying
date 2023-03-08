@@ -14,9 +14,6 @@ RPC_URL = os.environ.get('RPC_URL')
 # Connect to the Ethereum node using Web3
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
-# Get the current block number
-block_number = w3.eth.block_number
-block_range_to_query = range(block_number - 100 , block_number + 1)
 
 # Abi for viewing the balance of an address
 ABI = [
@@ -90,10 +87,11 @@ def get_usd_value(token_address, token_amount):
 
 
 
-def find_addresses_with_code():
+def find_addresses_with_code(start_block, end_block):
     # Loop through the last 5 blocks
     addresses = []
-    for block in block_range_to_query:
+ 
+    for block in range(start_block, end_block):
         print(f'Processing block {block}')
         try:
             # Get the transactions in the block
@@ -127,6 +125,8 @@ def find_addresses_with_code():
 
     # Remove duplicates from the list of addresses
     addresses = list(set(addresses))
+
+    return addresses
 
 
 def filter_addresses_with_balance(addresses_with_code):
@@ -166,17 +166,17 @@ def filter_addresses_with_balance(addresses_with_code):
             print("Error in rich address processing " , e)
 
 
-    # incorporate time in filename
-    current_time = datetime.datetime.now()
-    current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    # # incorporate time in filename
+    # current_time = datetime.datetime.now()
+    # current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
             
-    # Save the addresses array to a file using pickle
+    # # Save the addresses array to a file using pickle
 
-    filename = f'../output/unverified/contract_addresses_unverified_{current_time_str}.pickle'
-    with open(filename, 'wb') as f:
-        pickle.dump(rich_addresses, f)
+    # filename = f'../output/unverified/contract_addresses_unverified_{current_time_str}.pickle'
+    # with open(filename, 'wb') as f:
+    #     pickle.dump(rich_addresses, f)
 
-    return filename
+    return rich_addresses
 
 
     filter_contracts_verified(filename)
