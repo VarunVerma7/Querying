@@ -34,3 +34,6 @@ def main():
     etherscan_address_links = filter_duplicates(rich_addresses_verified)
 
     add_rows_to_notion(etherscan_address_links)
+
+if __name__ == "__main__":
+    main()

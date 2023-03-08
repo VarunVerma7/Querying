@@ -158,7 +158,8 @@ def filter_addresses_with_balance(addresses_with_code):
             
 
             if total_value_of_contract > value_to_filter:
-                print(address, total_value_of_contract)
+                dollar_formatted_value = "${:,.2f}".format(total_value_of_contract)
+                print(F"Address {address} is worth {dollar_formatted_value}")
                 rich_addresses.append(address)
         except Exception as e:
             print("Error in rich address processing " , e)

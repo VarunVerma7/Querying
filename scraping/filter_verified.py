@@ -27,7 +27,7 @@ def filter_contracts_verified(rich_addresses):
             # if this indexing works, contract has been verified
             if data['result'][0]['SourceCode']:
                 verified_count += 1
-                print("Verified count is {verified_count}")
+                print(f"Verified count is {verified_count}")
                 verified_addresses.append(address)
         except Exception as e:
             print("Error ", e)
