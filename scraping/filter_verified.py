@@ -2,7 +2,7 @@ import requests
 import pickle
 import time
 import os
-from set_envs import setenvs
+from utils.set_envs import setenvs
 import datetime
 
 def filter_contracts_verified(rich_addresses):

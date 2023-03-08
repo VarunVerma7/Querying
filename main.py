@@ -1,14 +1,16 @@
 from scraping.find_rich_addresses import find_addresses_with_code, filter_addresses_with_balance
 from scraping.find_rich_addresses import filter_addresses_with_balance
 from scraping.filter_verified import filter_contracts_verified
-from utils.push_to_notion import push_to_notion
+from utils.notion_push import filter_duplicates, add_rows_to_notion
+
+
+
 from web3 import Web3
 import requests
 from web3 import Web3
 import pickle
 import os
-from set_envs import setenvs
-import datetime
+from utils.set_envs import setenvs
 
 
 
@@ -29,4 +31,6 @@ def main():
     rich_addresses = filter_addresses_with_balance(addresses_with_code)
     rich_addresses_verified = filter_contracts_verified(rich_addresses)
 
-    push_to_notion(rich_addresses_verified)
+    etherscan_address_links = filter_duplicates(rich_addresses_verified)
+
+    add_rows_to_notion(etherscan_address_links)

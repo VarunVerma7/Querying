@@ -37,14 +37,38 @@ def filter_duplicates(potential_new_addresses):
 
 
     # append them to the notion table, prefixing the etherscan link to each address
-    addresses_not_in_cumlative_set_with_url = [f'https://etherscan.io/address/{address}' for address in addresses_not_in_cumlative_set]
+    etherscan_links_no_duplicates = [f'https://etherscan.io/address/{address}' for address in addresses_not_in_cumlative_set]
     
-    # add the addresses to the notion table
-    for address in addresses_not_in_cumlative_set_with_url:
-        add_row_to_notion(address)
 
-
+    return etherscan_links_no_duplicates
         
     
 
+
+def add_rows_to_notion(etherscan_address_links):
+
+    notion = Client(auth=os.environ['NOTION_TOKEN'])
+    database_id = os.environ['NOTION_DATABASE_ID']
+
+
+    for etherscan_link in etherscan_address_links:
+
+        print(f"Adding {etherscan_link} to the database")
+
+        new_row_properties = {
+        "Etherscan": {
+                "title": [
+                    {
+                        "text": {
+                            "content": f"{etherscan_link}"
+                        }
+                    }
+                ]
+            },
+        }
+
+        # Create new row in the database
+        new_row = notion.pages.create(parent={"database_id": database_id}, properties=new_row_properties)
+
+       
 

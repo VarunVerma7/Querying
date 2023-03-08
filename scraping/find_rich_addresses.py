@@ -2,7 +2,7 @@ import requests
 from web3 import Web3
 import pickle
 import os
-from set_envs import setenvs
+from utils.set_envs import setenvs
 import datetime
 from filter_verified import filter_contracts_verified
 
@@ -166,17 +166,5 @@ def filter_addresses_with_balance(addresses_with_code):
             print("Error in rich address processing " , e)
 
 
-    # # incorporate time in filename
-    # current_time = datetime.datetime.now()
-    # current_time_str = current_time.strftime("%Y-%m-%d %H:%M:%S")
-            
-    # # Save the addresses array to a file using pickle
-
-    # filename = f'../output/unverified/contract_addresses_unverified_{current_time_str}.pickle'
-    # with open(filename, 'wb') as f:
-    #     pickle.dump(rich_addresses, f)
-
     return rich_addresses
 
-
-    filter_contracts_verified(filename)
