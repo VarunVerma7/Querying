@@ -23,7 +23,7 @@ RPC_URL = os.environ.get('RPC_URL')
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 def main():
-    start_block =  w3.eth.block_number - 100
+    start_block =  w3.eth.block_number - 5
     end_block = w3.eth.block_number 
     print(f"Processing {end_block - start_block} blocks")
 
