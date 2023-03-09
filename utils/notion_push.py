@@ -5,7 +5,7 @@ from notion_client import Client
 
 
 
-def filter_duplicates(potential_new_addresses):
+def filter_duplicates(potential_new_addresses_object_arr):
 
     notion = Client(auth=os.environ['NOTION_TOKEN'])
     database_id = os.environ['NOTION_DATABASE_ID']
@@ -35,6 +35,7 @@ def filter_duplicates(potential_new_addresses):
 
 
     # check which addresses are in my_set but not in the cumulative set 
+    potential_new_addresses = [address['address'] for address in potential_new_addresses_object_arr]
     potential_new_addresses = set(potential_new_addresses)
     addresses_not_in_cumlative_set = list(potential_new_addresses.difference(notion_addresses))
 
@@ -46,7 +47,16 @@ def filter_duplicates(potential_new_addresses):
 
 
     # append them to the notion table, prefixing the etherscan link to each address
-    etherscan_links = [f'https://etherscan.io/address/{address}' for address in addresses_not_in_cumlative_set]
+    etherscan_links = []
+    for address in addresses_not_in_cumlative_set:
+        etherscan_links.append({
+            "etherscan_link": f'https://etherscan.io/address/{address}',
+            "erc20_balance": address['erc20_balance'],
+            "eth_balance": address['eth_balance'],
+
+        })
+    
+
     
     # new etherscan links to add to notion
     return etherscan_links
