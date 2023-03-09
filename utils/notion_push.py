@@ -2,7 +2,6 @@ import os
 import pickle
 from notion_client import Client
 
-
 def filter_duplicates(potential_new_addresses_object_arr):
 
     notion = Client(auth=os.environ['NOTION_TOKEN'])
@@ -19,7 +18,8 @@ def filter_duplicates(potential_new_addresses_object_arr):
     notion_addresses = []
     for page in results["results"]:
         try:
-            etherscan_link = (page['properties']['Etherscan']['title'][0]['text']['content'])
+            etherscan_link = (page['properties']['Link']['url'])
+            print("Etherscan link from notion: ", etherscan_link)
 
             address_from_etherscan_link = etherscan_link.split("/")[4].split("#")[0]
             notion_addresses.append(address_from_etherscan_link)
@@ -71,4 +71,5 @@ def add_rows_to_notion(etherscan_address_links):
         # Create new row in the database
         notion.pages.create(parent={"database_id": database_id}, properties=new_row_properties)
 
-       
+    
+
