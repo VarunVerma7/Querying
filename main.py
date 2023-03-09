@@ -23,14 +23,15 @@ RPC_URL = os.environ.get('RPC_URL')
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 def main():
-    start_block =  w3.eth.block_number - 5
-    end_block = w3.eth.block_number 
+    
+    start_block =  w3.eth.block_number - 1555
+    end_block = w3.eth.block_number - 1554
     print(f"Processing {end_block - start_block} blocks")
 
-    start_time = time.time()
+    start_time_1 = time.time()
     addresses_with_code =  find_addresses_with_code(start_block, end_block)
     end_time = time.time()
-    print(f"Time taken to find addresses with code: {round(end_time - start_time)} seconds")
+    print(f"Time taken to find addresses with code: {round(end_time - start_time_1)} seconds")
 
 
     start_time = time.time()
@@ -49,6 +50,9 @@ def main():
     add_rows_to_notion(etherscan_object_links)
     end_time = time.time()
     print(f"Time taken to add rows to notion: {round(end_time - start_time)} seconds")
+
+
+    print(f"Total time taken: {round(end_time - start_time_1)} seconds")
 
 if __name__ == "__main__":
     main()
