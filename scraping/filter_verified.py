@@ -10,7 +10,7 @@ def filter_contracts_verified(rich_addresses_object_arr):
     verified_addresses = []
     verified_count = 0
 
-    print(f"Going to loop through {len(rich_addresses_object_arr)} to see how many are verified on Etherscan")
+    print(f"Going to loop through {len(rich_addresses_object_arr )} to see how many are verified on Etherscan")
 
     for rich_address_object in rich_addresses_object_arr:
 
@@ -25,9 +25,9 @@ def filter_contracts_verified(rich_addresses_object_arr):
             response = requests.get(url)
             data = response.json()
             # if this indexing works, contract has been verified
-            if data['result'][0]['SourceCode']:
+            if len(data['result'][0]['SourceCode']) > 0:
+                print(f"Address {address} is verified and has {len(data['result'][0]['SourceCode'])} characters of code")
                 verified_count += 1
-                print(f"Address {address} is verified!")
                 verified_addresses.append(rich_address_object)
         except Exception as e:
             print("Error when verifying address {address} on etherscan: ", e)
