@@ -22,7 +22,7 @@ RPC_URL = os.environ.get('RPC_URL')
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 def main():
-    start_block =  w3.eth.block_number - 1
+    start_block =  w3.eth.block_number - 30
     end_block = w3.eth.block_number
 
 
@@ -31,9 +31,9 @@ def main():
     rich_addresses = filter_addresses_with_balance(addresses_with_code)
     rich_addresses_verified = filter_contracts_verified(rich_addresses)
 
-    etherscan_address_links = filter_duplicates(rich_addresses_verified)
+    etherscan_object_links = filter_duplicates(rich_addresses_verified)
 
-    add_rows_to_notion(etherscan_address_links)
+    add_rows_to_notion(etherscan_object_links)
 
 if __name__ == "__main__":
     main()
