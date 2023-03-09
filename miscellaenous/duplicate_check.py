@@ -10,8 +10,6 @@ def filter_duplicates():
     notion = Client(auth=os.environ['NOTION_TOKEN'])
     database_id = os.environ['NOTION_DATABASE_ID']
 
-
-
     results = notion.databases.query(
         **{
             "database_id": database_id,
@@ -22,7 +20,6 @@ def filter_duplicates():
     for page in results["results"]:
         try:
             etherscan_link = (page['properties']['Link']['url'])
-            # print("Etherscan link from notion: ", etherscan_link)
             if etherscan_link in notion_addresses:
                 print("Duplicate found: ", etherscan_link)
             notion_addresses.append(etherscan_link)
