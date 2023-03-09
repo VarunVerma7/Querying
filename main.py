@@ -12,6 +12,7 @@ import pickle
 import os
 from utils.set_envs import setenvs
 
+import time
 
 
 # set environment variables and retrieve them
@@ -22,18 +23,34 @@ RPC_URL = os.environ.get('RPC_URL')
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 def main():
-    start_block =  w3.eth.block_number - 1
-    end_block = w3.eth.block_number
+    start_block =  w3.eth.block_number - 3000000
+    end_block = w3.eth.block_number - 2999999
 
+    print(f"Processing {end_block - start_block} blocks")
+
+    start_time = time.time()
 
 
     addresses_with_code =  find_addresses_with_code(start_block, end_block)
+    end_time = time.time()
+
+    print(f"Time taken to find addresses with code: {end_time - start_time} seconds")
+
+    start_time = time.time()
     rich_addresses = filter_addresses_with_balance(addresses_with_code)
+    end_time = time.time()
+    print(f"Time taken to filter addresses with balance: {end_time - start_time} seconds")
     rich_addresses_verified = filter_contracts_verified(rich_addresses)
+    start_time = time.time()
 
     etherscan_object_links = filter_duplicates(rich_addresses_verified)
+    end_time = time.time()
+    print(f"Time taken to filter duplicates: {end_time - start_time} seconds")
 
+    start_time = time.time()
     add_rows_to_notion(etherscan_object_links)
+    end_time = time.time()
+    print(f"Time taken to add rows to notion: {end_time - start_time} seconds")
 
 if __name__ == "__main__":
     main()

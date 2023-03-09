@@ -62,30 +62,13 @@ def add_rows_to_notion(etherscan_address_links):
         eth_dollar_formatted_value = "${:,.2f}".format(etherscan_link['eth_balance'])
         erc20_dollar_formatted_value = "${:,.2f}".format(etherscan_link['erc20_balance'])
         new_row_properties = {
-        "Etherscan": {
-                "title": [
-                    {
-                        "text": {
-                            "content": f"{etherscan_link['etherscan_link']}"
-                        }
-                    }
-                ]
-            },
             "Ether": {"rich_text": [{"text": {"content": f"{eth_dollar_formatted_value}"}}]},
             "ERC20": {"rich_text": [{"text": {"content": f"{erc20_dollar_formatted_value}"}}]},
+            "Link": {"url": f"{etherscan_link['etherscan_link']}"},
+
         }
 
         # Create new row in the database
         notion.pages.create(parent={"database_id": database_id}, properties=new_row_properties)
 
        
-# arr = [
-#     {
-#         "etherscan_link": "https://etherscan.io/address/0x0",
-#          "erc20_balance": "0",
-#         "eth_balance": "0"
-#     }
-# ]
-
-
-# add_rows_to_notion(arr)
