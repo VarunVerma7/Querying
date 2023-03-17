@@ -22,10 +22,10 @@ RPC_URL = os.environ.get('RPC_URL')
 # Connect to the Ethereum node using Web3
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
-def main():
-    
-    start_block =  w3.eth.block_number - 1555
-    end_block = w3.eth.block_number - 1554
+def batch_process():
+    end_block = w3.eth.block_number 
+
+    start_block =  end_block - 1000
     print(f"Processing {end_block - start_block} blocks")
 
     start_time_1 = time.time()
@@ -53,6 +53,15 @@ def main():
 
 
     print(f"Total time taken: {round(end_time - start_time_1)} seconds")
+    print(f"Average time taken per block: {round((end_time - start_time_1)/(end_block - start_block))} seconds")
+
+
+
+def single_process():
+    while True:
+        
+    addresget_address()
 
 if __name__ == "__main__":
-    main()
+    single_process()
+    # main()

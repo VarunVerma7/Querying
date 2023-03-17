@@ -155,7 +155,7 @@ def filter_addresses_with_balance(addresses_with_code):
 
             if total_value_of_contract > value_to_filter:
                 dollar_formatted_value = "${:,.2f}".format(total_value_of_contract)
-                print(F"Address {address} is worth {dollar_formatted_value}")
+                print(F"Address {address} is worth {dollar_formatted_value}. Looped through {index} addresses out of {len(addresses_with_code)}")
                 rich_addresses.append({
                     'address': address,
                     'erc20_balance': erc20_value_contract,
